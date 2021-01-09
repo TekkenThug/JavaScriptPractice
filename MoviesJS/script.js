@@ -54,5 +54,9 @@ const personalMovieDB = {
         personalMovieDB.genres.push(genreName);
       }
     }
+
+    personalMovieDB.genres.forEach((item, index) => {
+      console.log(`Любимый жанр #${index + 1} - это ${item}`);
+    }); 
   }
 };
