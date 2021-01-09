@@ -49,5 +49,26 @@ function detectPersonalLevel() {
 
 detectPersonalLevel();
 
+function showMyDB() {
+  if (!personalMovieDB.privat) {
+    console.log(personalMovieDB);
+  }
+}
 
-console.log(personalMovieDB);
+showMyDB();
+
+function writeYourGenres() {
+  for (let i = 1; i <= 3; i++) {
+    let genreName = prompt(`Ваш любимый жанр под номером ${i}`, "");
+
+    if (genreName == "" || genreName == null) {
+      i--;
+    } else {
+      personalMovieDB.genres.push(genreName);
+    }
+  }
+}
+
+writeYourGenres();
+
+// console.log(personalMovieDB);
