@@ -24,3 +24,30 @@ const movieDB = {
     ]
 };
 
+const advBlock = document.querySelectorAll('.promo__adv *'),
+    filmPoster = document.querySelector('.promo__bg'),
+    genreName = filmPoster.querySelector('.promo__genre'),
+    filmList = document.querySelector('.promo__interactive-list');
+
+
+advBlock.forEach(item => item.remove());
+genreName.textContent = 'драма';
+filmPoster.style.backgroundImage = 'url(img/bg.jpg)';
+
+movieDB.movies.sort();
+
+filmList.innerHTML = "";
+
+movieDB.movies.forEach((film, index) => {
+    filmList.innerHTML += `
+    <li class="promo__interactive-item"> ${index + 1}. ${film}
+        <div class="delete"></div>
+    </li>
+    
+    `
+})
+
+
+
+
+
