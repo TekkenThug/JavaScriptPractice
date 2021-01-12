@@ -1,0 +1,18 @@
+.show {
+  display: block;
+  animation: fade 1s; /*timing-function delay iteration-count direction fill-mode;*/
+}
+
+.hide {
+  display: none;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0.01;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
