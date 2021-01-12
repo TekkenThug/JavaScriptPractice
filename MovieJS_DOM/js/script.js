@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         genreName = filmPoster.querySelector('.promo__genre'),
         filmList = document.querySelector('.promo__interactive-list'),
         addForm = document.querySelector('form.add'),
-        addBtn = addForm.querySelector('button'),
         addingInput = addForm.querySelector('input.adding__input'),
         favoriteCheckbox = addForm.querySelector('[type="checkbox"]');
 
