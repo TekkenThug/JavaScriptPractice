@@ -1,6 +1,6 @@
 .show {
   display: block;
-  animation: fade 1s; /*timing-function delay iteration-count direction fill-mode;*/
+  animation: fade 0.5s;
 }
 
 .hide {

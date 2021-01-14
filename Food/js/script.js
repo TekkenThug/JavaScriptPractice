@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Timer
-  const deadLine = '2021-01-14';
+  const deadLine = '2021-02-24';
 
   function getTimeRange(endtime) {
     const t = new Date(endtime) - new Date(),
@@ -90,4 +90,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   setClock('.timer', deadLine);
+
+  // Modal window
+  const modalWindow = document.querySelector('.modal'),
+        modalCloseBtn = document.querySelector('[data-close]'),
+        modalTrigger = document.querySelectorAll('[data-modal]');
+
+  function closeModal() {
+    modalWindow.classList.toggle('show');
+    document.body.style.overflow = '';
+  }
+
+  modalTrigger.forEach(item => {
+    item.addEventListener('click', () => {
+      modalWindow.classList.toggle('show');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  modalCloseBtn.addEventListener('click', closeModal);
+  
+  modalWindow.addEventListener('click', (e) => {
+    if (e.target === modalWindow) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code == 'Escape' && modalWindow.classList.contains('show')) {
+      closeModal();
+    }
+  });
+
 });
