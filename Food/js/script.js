@@ -206,19 +206,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const request = new XMLHttpRequest();
 
       request.open('POST', 'server.php');
-      //request.setRequestHeader('Content-type', 'multipart/form-data');
+      request.setRequestHeader('Content-type', 'application/json');
 
       const formData = new FormData(form);
 
-      request.send(formData);
+      const obj = {};
+      formData.forEach((item, key) => {
+        obj[key] = item;
+      });
+
+      const json = JSON.stringify(obj);
+
+      request.send(json);
 
       request.addEventListener('load', () => {
-        console.log('Загрузка ебаная');
         if (request.status == 200) {
           msgBox.textContent = message.success;
+          console.log(request.response);
           form.reset();
           setTimeout(() => {
-            msgBox.remove()
+            msgBox.remove();
           }, 2000);
         } else {
           msgBox.textContent = message.failure;
