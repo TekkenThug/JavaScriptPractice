@@ -2,13 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Tabs
   const tabs = document.querySelectorAll('.tabheader__item'),
-        tabsContent = document.querySelectorAll('.tabcontent'),
-        tabsParent = document.querySelector('.tabheader__items');
-  
+    tabsContent = document.querySelectorAll('.tabcontent'),
+    tabsParent = document.querySelector('.tabheader__items');
+
   function hideTabContent() {
     tabsContent.forEach(item => {
-        item.classList.add('hide');
-        item.classList.remove('show');
+      item.classList.add('hide');
+      item.classList.remove('show');
     });
 
     tabs.forEach(tab => {
@@ -43,10 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getTimeRange(endtime) {
     const t = new Date(endtime) - new Date(),
-          days = Math.floor(t / (1000 * 60 * 60 * 24)),
-          hours = Math.floor((t / (1000 * 60 * 60)) % 24),
-          minutes = Math.floor((t / (1000 * 60)) % 60),
-          seconds = Math.floor((t / 1000) % 60);
+      days = Math.floor(t / (1000 * 60 * 60 * 24)),
+      hours = Math.floor((t / (1000 * 60 * 60)) % 24),
+      minutes = Math.floor((t / (1000 * 60)) % 60),
+      seconds = Math.floor((t / 1000) % 60);
 
     return {
       'total': t,
@@ -67,14 +67,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setClock(selector, endtime) {
     const timer = document.querySelector(selector),
-          days = timer.querySelector('#days'),
-          hours = timer.querySelector('#hours'),
-          minutes = timer.querySelector('#minutes'),
-          seconds = timer.querySelector('#seconds'),
-          timeInterval = setInterval(updateClock, 1000);
+      days = timer.querySelector('#days'),
+      hours = timer.querySelector('#hours'),
+      minutes = timer.querySelector('#minutes'),
+      seconds = timer.querySelector('#seconds'),
+      timeInterval = setInterval(updateClock, 1000);
 
     updateClock();
-          
+
     function updateClock() {
       const t = getTimeRange(endtime);
 
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
       hours.innerHTML = getZero(t.hours);
       minutes.innerHTML = getZero(t.minutes);
       seconds.innerHTML = getZero(t.seconds);
-      
+
       if (t.total <= 0) {
         clearInterval(timeInterval);
       }
@@ -93,8 +93,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Modal window
   const modalWindow = document.querySelector('.modal'),
-        modalTrigger = document.querySelectorAll('[data-modal]');
-        modalTimer = setTimeout(openModal, 50000);
+    modalTrigger = document.querySelectorAll('[data-modal]');
+  modalTimer = setTimeout(openModal, 50000);
 
   function openModal() {
     modalWindow.classList.add('show');
@@ -152,9 +152,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     render() {
       const element = document.createElement('div');
-      
-     this.classes.push("menu__item");
-     this.classes.forEach(className => element.classList.add(className));
+
+      this.classes.push("menu__item");
+      this.classes.forEach(className => element.classList.add(className));
 
       element.innerHTML = `
         <img src=${this.src} alt=${this.alt}>
@@ -204,11 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       form.insertAdjacentElement('afterend', msgBox);
 
-      const request = new XMLHttpRequest();
-
-      request.open('POST', 'server.php');
-      request.setRequestHeader('Content-type', 'application/json');
-
       const formData = new FormData(form);
 
       const obj = {};
@@ -216,21 +211,23 @@ document.addEventListener("DOMContentLoaded", () => {
         obj[key] = item;
       });
 
-      const json = JSON.stringify(obj);
-
-      request.send(json);
-
-      request.addEventListener('load', () => {
-        if (request.status == 200) {
-          console.log(request.response);
+      fetch("server1.php", {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(obj)
+      }).then(data => data.text())
+        .then(data => {
+          console.log(data);
           showThanksModal(message.success);
-          form.reset();
           msgBox.remove();
-        } else {
+        }).catch(() => {
           msgBox.textContent = message.failure;
           showThanksModal(message.failure);
-        }
-      });
+        }).finally(() => {
+          form.reset();
+        })
     });
   }
 
