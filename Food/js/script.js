@@ -169,14 +169,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  new Card(
-    "img/tabs/vegy.jpg",
-    "vegy",
-    'Меню "Фитнес"',
-    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-    8,
-    '.menu .container'
-  ).render();
+  const getResources = async (url) => {
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    }
+
+    return await res.json();
+  };
+
+  getResources("http://localhost:3000/menu")
+    .then(data => {
+      data.forEach(({img, altimg, title, descr, price}) => {
+        new Card(img, altimg, title, descr, price, '.menu .container').render();
+      })
+    })
 
   // Forms 
 
@@ -189,10 +197,22 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   forms.forEach(item => {
-    postData(item);
+    bindPostData(item);
   });
 
-  function postData(form) {
+  const postData = async (url, data) => {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: data
+    });
+
+    return await res.json();
+  };
+
+  function bindPostData(form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -205,19 +225,9 @@ document.addEventListener("DOMContentLoaded", () => {
       form.insertAdjacentElement('afterend', msgBox);
 
       const formData = new FormData(form);
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-      const obj = {};
-      formData.forEach((item, key) => {
-        obj[key] = item;
-      });
-
-      fetch("server1.php", {
-        method: "POST",
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(obj)
-      }).then(data => data.text())
+      postData('http://localhost:3000/requests', json)
         .then(data => {
           console.log(data);
           showThanksModal(message.success);
