@@ -264,4 +264,54 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   fetch("db.json").then(data => data.json()).then(result => console.log(result));
+
+  
+  // Slider
+  const slides = document.querySelectorAll(".offer__slide");
+  const previous = document.querySelector(".offer__slider-prev");
+  const next = document.querySelector(".offer__slider-next");
+  const counterSlide = document.querySelector("#current");
+  const totalCounterSlide = document.querySelector("#total");
+  
+  let slideIndex = 1;
+
+  showSlides(slideIndex);
+  updateCounterSlider(slides.length, totalCounterSlide);
+
+  function showSlides(n) {
+    if (n > slides.length) {
+      slideIndex = 1;
+    }
+
+    if (n < 1) {
+      slideIndex = slides.length;
+    }
+
+    slides.forEach(slide => slide.style.display = "none");
+
+    slides[slideIndex - 1].style.display = "block";
+
+    updateCounterSlider(slideIndex, counterSlide);
+  }
+
+  function updateCounterSlider(n, item) {
+    if (n < 10) {
+      item.innerHTML = `0${n}`;
+    } else {
+      item.innerHTML = `${n}`;
+    }
+  }
+
+  function plusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+
+  previous.addEventListener("click", () => {
+    plusSlides(-1);
+  });
+
+  next.addEventListener("click", () => {
+    plusSlides(1);
+  });
+
 });
