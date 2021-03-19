@@ -267,32 +267,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   
   // Slider
-  const slides = document.querySelectorAll(".offer__slide");
-  const previous = document.querySelector(".offer__slider-prev");
-  const next = document.querySelector(".offer__slider-next");
-  const counterSlide = document.querySelector("#current");
-  const totalCounterSlide = document.querySelector("#total");
-  
+  const slides = document.querySelectorAll(".offer__slide"),
+        previous = document.querySelector(".offer__slider-prev"),
+        next = document.querySelector(".offer__slider-next"),
+        counterSlide = document.querySelector("#current"),
+        totalCounterSlide = document.querySelector("#total"),
+        slidesWrapper = document.querySelector(".offer__slider-wrapper"),
+        slidesInner = document.querySelector(".offer__slider-inner"),
+        width = window.getComputedStyle(slidesWrapper).width;
+
   let slideIndex = 1;
+  let offset = 0;
 
-  showSlides(slideIndex);
+  slidesInner.style.width = `${100 * slides.length}%`;
+  slidesInner.style.display = "flex";
+  slidesInner.style.transition = "all 0.5s";
+
+  slides.forEach(slide => {
+    slide.style.width = width;
+  });
+
+  slidesWrapper.style.overflow = "hidden";
+
+  updateCounterSlider(slideIndex, counterSlide);
   updateCounterSlider(slides.length, totalCounterSlide);
-
-  function showSlides(n) {
-    if (n > slides.length) {
-      slideIndex = 1;
-    }
-
-    if (n < 1) {
-      slideIndex = slides.length;
-    }
-
-    slides.forEach(slide => slide.style.display = "none");
-
-    slides[slideIndex - 1].style.display = "block";
-
-    updateCounterSlider(slideIndex, counterSlide);
-  }
 
   function updateCounterSlider(n, item) {
     if (n < 10) {
@@ -302,16 +300,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function plusSlides(n) {
-    showSlides(slideIndex += n);
-  }
-
   previous.addEventListener("click", () => {
-    plusSlides(-1);
+    if (offset == 0) {
+      offset = parseFloat(width) * (slides.length - 1);
+      slideIndex = slides.length;
+    } else {
+      offset -= parseFloat(width);
+      --slideIndex;
+    }
+
+    updateCounterSlider(slideIndex, counterSlide);
+
+    slidesInner.style.transform = `translateX(-${offset}px)`;
   });
 
   next.addEventListener("click", () => {
-    plusSlides(1);
+    if (offset == parseFloat(width) * (slides.length - 1)) {
+      offset = 0;
+      slideIndex = 1;
+    } else {
+      offset += parseFloat(width);
+      ++slideIndex;
+    }
+
+    updateCounterSlider(slideIndex, counterSlide);
+
+    slidesInner.style.transform = `translateX(-${offset}px)`;
   });
 
 });
