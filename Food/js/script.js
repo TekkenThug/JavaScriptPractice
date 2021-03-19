@@ -267,7 +267,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   
   // Slider
-  const slides = document.querySelectorAll(".offer__slide"),
+  const slider = document.querySelector(".offer__slider"),
+        slides = document.querySelectorAll(".offer__slide"),
         previous = document.querySelector(".offer__slider-prev"),
         next = document.querySelector(".offer__slider-next"),
         counterSlide = document.querySelector("#current"),
@@ -287,6 +288,26 @@ document.addEventListener("DOMContentLoaded", () => {
     slide.style.width = width;
   });
 
+  slider.style.position = "relative";
+
+  const dotsWrapper = document.createElement("ol"),
+        dots = [];
+
+  dotsWrapper.classList.add("carousel-indicators");
+  slider.append(dotsWrapper);
+
+  for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement("li");
+    dot.setAttribute("data-slide-id", i + 1);
+    dot.classList.add("dot");
+    
+    if (i == 0) {
+      dot.style.opacity = "1";
+    }
+    dotsWrapper.append(dot);
+    dots.push(dot);
+  }
+
   slidesWrapper.style.overflow = "hidden";
 
   updateCounterSlider(slideIndex, counterSlide);
@@ -298,6 +319,11 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       item.innerHTML = `${n}`;
     }
+  }
+
+  function refreshDots(index) {
+    dots.forEach(dot => dot.style.opacity = "0.5");
+    dots[index - 1].style.opacity = "1";
   }
 
   previous.addEventListener("click", () => {
@@ -312,6 +338,8 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCounterSlider(slideIndex, counterSlide);
 
     slidesInner.style.transform = `translateX(-${offset}px)`;
+
+    refreshDots(slideIndex);
   });
 
   next.addEventListener("click", () => {
@@ -326,6 +354,21 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCounterSlider(slideIndex, counterSlide);
 
     slidesInner.style.transform = `translateX(-${offset}px)`;
+    refreshDots(slideIndex);
   });
+
+  dots.forEach(dot => {
+    dot.addEventListener("click", (event) => {
+      const slideTo = event.target.getAttribute("data-slide-id");
+
+      slideIndex = slideTo;
+      offset = parseFloat(width) * (slideTo - 1);
+
+      slidesInner.style.transform = `translateX(-${offset}px)`;
+
+      updateCounterSlider(slideIndex, counterSlide);
+      refreshDots(slideIndex);
+    });
+  })
 
 });
