@@ -1,6 +1,4 @@
-function timer() {
-     // Timer
-  const deadLine = "2021-02-24";
+function timer(id, deadLine) {
 
   function getTimeRange(endtime) {
     const t = new Date(endtime) - new Date(),
@@ -50,8 +48,8 @@ function timer() {
     }
   }
 
-  setClock(".timer", deadLine);
+  setClock(id, deadLine);
 
 }
 
-module.exports = timer;
+export default timer;

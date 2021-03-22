@@ -1,5 +1,4 @@
 function calculator() {
-  // Calculator
   const totalCalories = document.querySelector(".calculating__result span");
   let height, weight, age;
 
@@ -105,4 +104,4 @@ function calculator() {
   }
 }
 
-module.exports = calculator;
+export default calculator;
