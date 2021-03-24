@@ -7,6 +7,7 @@ import calculator from "./modules/calculator";
 import modal from "./modules/modal";
 import openModal from "./modules/modal";
 
+
 document.addEventListener("DOMContentLoaded", () => {
   const modalTimerId = setTimeout(() => openModal(".modal", modalTimerId), 30000);
 
